@@ -1,0 +1,14 @@
+[
+  {"sql": "DELETE FROM recipients WHERE optin = 0", "write": true, "why": "plain DELETE"},
+  {"sql": "delete\nfrom recipients", "write": true, "why": "DELETE followed by a newline"},
+  {"sql": "SELECT 1; DROP TABLE nms_recipient", "write": true, "why": "stacked statement after a semicolon"},
+  {"sql": "SELECT purge_inactive_recipients()", "write": true, "why": "stored function with side effects"},
+  {"sql": "UPDATE\trecipients SET optin=1", "write": true, "why": "UPDATE followed by a tab"},
+  {"sql": "ＤＥＬＥＴＥ FROM recipients", "write": true, "why": "full-width Unicode letters"},
+  {"sql": "WITH gone AS (DELETE FROM recipients RETURNING id) SELECT count(*) FROM gone", "write": true, "why": "write hidden inside a CTE"},
+  {"sql": "SELECT * FROM deleted_items", "write": false, "why": "table name contains 'deleted'"},
+  {"sql": "SELECT note FROM tickets WHERE note = 'please delete me'", "write": false, "why": "the word delete inside a string"},
+  {"sql": "SELECT country, count(*) FROM recipients GROUP BY country", "write": false, "why": "aggregate read"},
+  {"sql": "SELECT lower(email_domain), round(avg(open_rate), 2) FROM stats GROUP BY 1", "write": false, "why": "read with safe functions"},
+  {"sql": "SELECT format_report(market) FROM markets", "write": false, "why": "unknown but read-only function"}
+]
